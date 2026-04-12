@@ -54,12 +54,16 @@ app.include_router(loans_router)
 # ─────────────────────────────────────────────
 # Serve o front-end estático (opcional)
 # ─────────────────────────────────────────────
-if os.path.exists("static"):
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+INDEX_PATH = os.path.join(STATIC_DIR, "index.html")
+
+if os.path.exists(STATIC_DIR):
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
     @app.get("/", include_in_schema=False)
     def serve_frontend():
-        return FileResponse("static/index.html")
+        return FileResponse(INDEX_PATH)
 
 
 # ─────────────────────────────────────────────
